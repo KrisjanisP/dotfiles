@@ -60,6 +60,7 @@ require('lazy').setup({
             vim.o.timeout = true
             vim.o.timeoutlen = 300
         end,
-    }
+    },
+    { 'simrat39/symbols-outline.nvim' },
+    { 'ThePrimeagen/harpoon' }
 })
-

@@ -59,3 +59,14 @@ vim.keymap.set('n', '<C-p>', builtin.git_files, {})
 vim.keymap.set('n', '<leader>ps', function()
     builtin.grep_string({ search = vim.fn.input("Grep > ") });
 end)
+
+require("symbols-outline").setup()
+
+require('harpoon').setup()
+
+vim.keymap.set('n', '<leader>h', require('harpoon.ui').toggle_quick_menu, {})
+vim.keymap.set('n', '<leader>a', require('harpoon.mark').add_file, {})
+
+vim.keymap.set('n', '<leader>1', function() require('harpoon.ui').nav_file(1) end, {})
+vim.keymap.set('n', '<leader>2', function() require('harpoon.ui').nav_file(2) end, {})
+vim.keymap.set('n', '<leader>3', function() require('harpoon.ui').nav_file(3) end, {})
