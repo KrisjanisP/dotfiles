@@ -47,3 +47,14 @@ Checkout the actual content from the git repository:
 ```
 dotfiles checkout
 ```
+
+## additional notes
+
+Because the alacritty config requires specific fonts to be installed,
+I have added the script `./scripts/setup-fonts.sh`.
+
+The script downloads FiraCode Nerd Font zip file into a temporary directory,
+unzips the archive and moves .ttf and .otf files into `${HOME}/.fonts`.
+Afterwards it refreshes font cache.
+
+
