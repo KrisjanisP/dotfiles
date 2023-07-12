@@ -11,8 +11,9 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 
 require('copilot').setup({
-    suggestion = { enabled = false },
-    panel = { enabled = false },
+    filetypes = {
+        ["*"] = true, -- Enable for all filetypes
+    },
 })
 
 require('copilot_cmp').setup()
@@ -70,3 +71,4 @@ vim.keymap.set('n', '<leader>a', require('harpoon.mark').add_file, {})
 vim.keymap.set('n', '<leader>1', function() require('harpoon.ui').nav_file(1) end, {})
 vim.keymap.set('n', '<leader>2', function() require('harpoon.ui').nav_file(2) end, {})
 vim.keymap.set('n', '<leader>3', function() require('harpoon.ui').nav_file(3) end, {})
+
