@@ -60,7 +60,11 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 
-    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating",)
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating",),
+
+    # launch j4-dmenu-desktop
+    Key([mod], "a", lazy.spawn("j4-dmenu-desktop"),
+        desc="Launch j4-dmenu-desktop"),
 ]
 
 groups = [Group(i) for i in "123456"]
