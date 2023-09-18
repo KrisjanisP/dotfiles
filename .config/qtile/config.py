@@ -2,30 +2,36 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 import subprocess
+import os
 
 mod = "mod4"
 terminal = "alacritty"
 
+
 class AcpiWidget(widget.GenPollText):
     def __init__(self, **config):
         super().__init__(**config)
-        self.update_interval=30
+        self.update_interval = 30
 
     def poll(self):
         try:
-            output=subprocess.check_output(["acpi"], universal_newlines=True)
-            return output.strip().replace("Battery 0: ", "")
+            output = subprocess.check_output(["acpi"], universal_newlines=True)
+            if "rate information unavailable" in output:
+                return "SAPHIRE"
+            output = output.strip().replace("Battery 0: ", "")
+            return output
         except subprocess.CalledProcessError as e:
             return "Error: {}".format(e)
 
+
 @hook.subscribe.startup_once
 def autostart():
+    HOME_DIR = os.path.expanduser('~')
+    SCREEN_SCRIPT = f'{HOME_DIR}/.screenlayout/default-screen-layout.sh'
+    if os.path.exists(SCREEN_SCRIPT):
+        subprocess.Popen([SCREEN_SCRIPT])
     subprocess.Popen(['copyq'])
     subprocess.Popen(['flameshot'])
-    subprocess.Popen(['firefox'])
-    subprocess.Popen(['discord'])
-    subprocess.Popen(['spotify'])
-    subprocess.Popen(['postman'])
 
 
 keys = [
@@ -41,7 +47,8 @@ keys = [
         desc="Move window to the left"),
     Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
         desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
+        desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
@@ -49,7 +56,8 @@ keys = [
         desc="Grow window to the left"),
     Key([mod, "control"], "l", lazy.layout.grow_right(),
         desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    Key([mod, "control"], "j", lazy.layout.grow_down(),
+        desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
     # Toggle between split and unsplit sides of stack.
@@ -68,7 +76,8 @@ keys = [
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "r", lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"),
 
     Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle floating",),
 
@@ -85,11 +94,11 @@ for i in range(len(group_labels)):
 
 groups[group_labels.index('DEV')].spawn = 'alacritty'
 groups[group_labels.index('OBS')].spawn = 'obsidian'
-groups[group_labels.index('WEB')].matches.append(Match(wm_class='firefox'))
-groups[group_labels.index('TEST')].matches.append(Match(wm_class='postman'))
+groups[group_labels.index('WEB')].spawn = 'firefox'
+groups[group_labels.index('TEST')].spawn = 'postman'
 groups[group_labels.index('DB')].spawn = 'datagrip'
-groups[group_labels.index('CHAT')].matches.append(Match(wm_class='discord'))
-groups[group_labels.index('MUS')].matches.append(Match(wm_class='spotify'))
+groups[group_labels.index('CHAT')].spawn = 'discord'
+groups[group_labels.index('MUS')].spawn = 'spotify'
 
 for g in groups:
     keys.extend(
@@ -101,7 +110,7 @@ for g in groups:
                 lazy.group[g.name].toscreen(),
                 desc="Switch to group {}".format(g.name),
             ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
+            # mod1 + shift + letter of group = switch to & move focused window
             Key(
                 [mod, "shift"],
                 g.name,
