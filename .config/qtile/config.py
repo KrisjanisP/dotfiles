@@ -6,10 +6,20 @@ import subprocess
 mod = "mod4"
 terminal = "alacritty"
 
+class AcpiWidget(widget.GenPollText):
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.update_interval=30
+
+    def poll(self):
+        try:
+            output=subprocess.check_output(["acpi"], universal_newlines=True)
+            return output.strip().replace("Battery 0: ", "")
+        except subprocess.CalledProcessError as e:
+            return "Error: {}".format(e)
 
 @hook.subscribe.startup_once
 def autostart():
-    subprocess.Popen(['/home/kp/.screenlayout/default-screen-layout.sh'])
     subprocess.Popen(['copyq'])
     subprocess.Popen(['flameshot'])
     subprocess.Popen(['firefox'])
@@ -67,13 +77,14 @@ keys = [
         desc="Launch j4-dmenu-desktop"),
 ]
 
-groups = [Group(i) for i in "123456"]
-group_labels = ["DEV", "WEB", "TEST", "DB", "CHAT", "MUS"]
+groups = [Group(i) for i in "1234567"]
+group_labels = ["DEV", "OBS", "WEB", "TEST", "DB", "CHAT", "MUS"]
 
 for i in range(len(group_labels)):
     groups[i].label = group_labels[i]
 
 groups[group_labels.index('DEV')].spawn = 'alacritty'
+groups[group_labels.index('OBS')].spawn = 'obsidian'
 groups[group_labels.index('WEB')].matches.append(Match(wm_class='firefox'))
 groups[group_labels.index('TEST')].matches.append(Match(wm_class='postman'))
 groups[group_labels.index('DB')].spawn = 'datagrip'
@@ -145,6 +156,7 @@ screens = [
                 ),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
+                AcpiWidget(),
                 widget.Systray(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
