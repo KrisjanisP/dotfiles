@@ -32,6 +32,7 @@ def autostart():
         subprocess.Popen([SCREEN_SCRIPT])
     subprocess.Popen(['copyq'])
     subprocess.Popen(['flameshot'])
+    subprocess.Popen(['postman'])
 
 
 keys = [
@@ -95,7 +96,7 @@ for i in range(len(group_labels)):
 groups[group_labels.index('DEV')].spawn = 'alacritty'
 groups[group_labels.index('OBS')].spawn = 'obsidian'
 groups[group_labels.index('WEB')].spawn = 'firefox'
-groups[group_labels.index('TEST')].spawn = 'postman'
+groups[group_labels.index('TEST')].matches.append(Match(wm_class='postman'))
 groups[group_labels.index('DB')].spawn = 'datagrip'
 groups[group_labels.index('CHAT')].spawn = 'discord'
 groups[group_labels.index('MUS')].spawn = 'spotify'
@@ -154,7 +155,7 @@ screens = [
         bottom=bar.Bar(
             [
                 widget.CurrentLayout(),
-                widget.GroupBox(),
+                widget.GroupBox(disable_drag=True),
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
@@ -181,7 +182,7 @@ screens = [
         bottom=bar.Bar(
             [
                 widget.CurrentLayout(),
-                widget.GroupBox(),
+                widget.GroupBox(disable_drag=True),
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
@@ -204,7 +205,7 @@ screens = [
         bottom=bar.Bar(
             [
                 widget.CurrentLayout(),
-                widget.GroupBox(),
+                widget.GroupBox(disable_drag=True),
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
