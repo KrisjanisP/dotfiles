@@ -27,9 +27,12 @@ class AcpiWidget(widget.GenPollText):
 @hook.subscribe.startup_once
 def autostart():
     HOME_DIR = os.path.expanduser('~')
-    SCREEN_SCRIPT = f'{HOME_DIR}/.screenlayout/default-screen-layout.sh'
+    SCREEN_SCRIPT = f'{HOME_DIR}/.config/qtile/screenlayout.sh'
     if os.path.exists(SCREEN_SCRIPT):
         subprocess.Popen([SCREEN_SCRIPT])
+    AUTO_START_SCRIPT = f'{HOME_DIR}/.config/qtile/autostart.sh'
+    if os.path.exists(AUTO_START_SCRIPT):
+        subprocess.Popen([AUTO_START_SCRIPT])
     subprocess.Popen(['copyq'])
     subprocess.Popen(['flameshot'])
     subprocess.Popen(['postman'])
@@ -87,13 +90,13 @@ keys = [
         desc="Launch j4-dmenu-desktop"),
 ]
 
-groups = [Group(i) for i in "1234567"]
-group_labels = ["DEV", "OBS", "WEB", "TEST", "DB", "CHAT", "MUS"]
+groups = [Group(i) for i in "123456789"]
+group_labels = ["DEV1", "DEV2", "OBS", "WEB", "TEST", "DB",
+                "CHAT", "MUS", "GFX"]
 
 for i in range(len(group_labels)):
     groups[i].label = group_labels[i]
 
-groups[group_labels.index('DEV')].spawn = 'alacritty'
 groups[group_labels.index('OBS')].spawn = 'obsidian'
 groups[group_labels.index('WEB')].spawn = 'firefox'
 groups[group_labels.index('TEST')].matches.append(Match(wm_class='postman'))
@@ -138,7 +141,7 @@ layouts = [
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
-    # layout.TreeTab(),
+    layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
@@ -222,7 +225,7 @@ screens = [
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
-        wallpaper='/home/kp/Wallpapers/roads.jpg',
+        wallpaper='/home/kp/Wallpapers/eat-sleep-code-repeat.jpg',
         wallpaper_mode='stretch'
     )
 ]

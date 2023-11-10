@@ -8,6 +8,7 @@ set -U fish_user_paths $fish_user_paths /home/krisjanisp/.local/share/gem/ruby/3
 set -U fish_user_paths $fish_user_paths /home/krisjanisp/.local/bin
 set -U fish_user_paths $fish_user_paths /home/kp/.local/share/gem/ruby/3.0.0/bin
 set -U fish_user_paths $fish_user_paths /home/kp/.local/bin
+set -U fish_user_paths $fish_user_paths /home/kp/go/bin/
 
 function fish_prompt
     echo (pwd) '> '
